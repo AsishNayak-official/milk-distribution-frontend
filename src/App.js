@@ -1,8 +1,12 @@
 import CardLayout from "./components/CardLayout";
+import FormHeader from "./components/FormHeader";
 
 function App() {
   return (
-    <CardLayout/>
+    <div>
+      <FormHeader />
+      <CardLayout />
+    </div>
   );
 }
 
