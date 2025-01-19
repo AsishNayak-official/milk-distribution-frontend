@@ -2,21 +2,21 @@ import { Button, Input } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import React from "react";
 
-const UserForm = ({disable=false}) => {
+const UserForm = ({disable=false,userInfo,shopId}) => {
   //call api for details fetch here
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      membershipNo: "",
-      milkSupplied: "",
-      fatPercentage: "",
-      snfPercentage: "",
-      aadharNumber: "",
-      bankName: "",
-      branchName: "",
-      accountNumber: "",
-      ifscCode: "",
+      name: userInfo?.name ?? "",
+      membershipNo: userInfo?.membership_no??"",
+      milkSupplied: userInfo?.total_qty_milk_supplied??"",
+      fatPercentage: userInfo?.fat_percentage??"",
+      snfPercentage: userInfo?.snf_percentage??"",
+      aadharNumber: userInfo?.adhaar??"",
+      bankName: userInfo?.bank_name??"",
+      branchName: userInfo?.branch_name??"",
+      accountNumber: userInfo?.account_number??"",
+      ifscCode: userInfo?.ifsc_code??"",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
