@@ -2,7 +2,7 @@ import { Button, Input } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import React from "react";
 
-const UserForm = () => {
+const UserForm = ({disable=false}) => {
   //call api for details fetch here
 
   const formik = useFormik({
@@ -30,6 +30,7 @@ const UserForm = () => {
       <Input
         variant="filled"
         placeholder="Name"
+        disabled={disable}
         name="name"
         value={formik.values.name}
         onChange={formik.handleChange}
@@ -38,6 +39,7 @@ const UserForm = () => {
       <p>Membership No.</p>
       <Input
         variant="filled"
+        disabled={disable }
         placeholder="Membership No"
         name="membershipNo"
         value={formik.values.membershipNo}

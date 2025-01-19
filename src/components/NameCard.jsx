@@ -21,7 +21,7 @@ const NameCard = () => {
           <ChevronDownIcon onClick={()=>{setIsExpanded(!isExpanded)}} />
         </div>
       </div>
-      {isExpanded && <UserForm isEdit={isEdit} setIsEdit={setIsEdit}/>}
+      {isExpanded && <UserForm disable={true}/>}
     </div>
   );
 };

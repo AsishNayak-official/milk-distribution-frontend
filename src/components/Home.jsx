@@ -5,7 +5,7 @@ import FormHeader from "./FormHeader";
 
 const Home = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-y-3">
       <FormHeader />
       <AddNDownload />
       <CardLayout />
