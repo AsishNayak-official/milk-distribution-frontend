@@ -1,6 +1,7 @@
 import { Button, Input } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import React from "react";
+import { updateUserInfo } from "../api/userDetailsApi";
 
 const UserForm = ({disable=false,userInfo,shopId}) => {
   //call api for details fetch here
@@ -8,21 +9,35 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
   const formik = useFormik({
     initialValues: {
       name: userInfo?.name ?? "",
-      membershipNo: userInfo?.membership_no??"",
-      milkSupplied: userInfo?.total_qty_milk_supplied??"",
-      fatPercentage: userInfo?.fat_percentage??"",
-      snfPercentage: userInfo?.snf_percentage??"",
-      aadharNumber: userInfo?.adhaar??"",
-      bankName: userInfo?.bank_name??"",
-      branchName: userInfo?.branch_name??"",
-      accountNumber: userInfo?.account_number??"",
-      ifscCode: userInfo?.ifsc_code??"",
+      membership_no: userInfo?.membership_no??"",
+      total_qty_milk_supplied: userInfo?.total_qty_milk_supplied??"",
+      fat_percentage: userInfo?.fat_percentage??"",
+      snf_percentage: userInfo?.snf_percentage??"",
+      adhaar: userInfo?.adhaar??"",
+      bank_name: userInfo?.bank_name??"",
+      branch_name: userInfo?.branch_name??"",
+      account_number: userInfo?.account_number??"",
+      ifsc_code: userInfo?.ifsc_code??"",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log("Form Values: ", values);
+      if(userInfo){
+        updateUserInfo(shopId,values,userInfo?.id)
+        .then((res)=>{
+          
+        })
+        .catch((err)=>{})
+      }
+      else{
+        updateUserInfo(shopId,values)
+        .then((res)=>{
+      
+        })
+        .catch((err)=>{})
+      }
     },
   });
+
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-y-1 my-2">
@@ -41,18 +56,20 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
         variant="filled"
         disabled={disable }
         placeholder="Membership No"
-        name="membershipNo"
-        value={formik.values.membershipNo}
+        name="membership_no"
+        value={formik.values.membership_no}
         onChange={formik.handleChange}
+        type="number"
       />
 
-      <p>Milk supplied (No of)</p>
+      <p>Total Quantity of Milk supplied</p>
       <Input
         variant="filled"
-        placeholder="Milk supplied (No of)"
-        name="milkSupplied"
-        value={formik.values.milkSupplied}
+        placeholder="Total Quantity of Milk supplied"
+        name="total_qty_milk_supplied"
+        value={formik.values.total_qty_milk_supplied}
         onChange={formik.handleChange}
+        type="number"
       />
 
       <p>Average</p>
@@ -62,9 +79,10 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
           <Input
             variant="filled"
             placeholder="Fat%"
-            name="fatPercentage"
-            value={formik.values.fatPercentage}
+            name="fat_percentage"
+            value={formik.values.fat_percentage}
             onChange={formik.handleChange}
+            type="number"
           />
         </div>
         <div className="w-1/2">
@@ -72,9 +90,10 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
           <Input
             variant="filled"
             placeholder="SNF%"
-            name="snfPercentage"
-            value={formik.values.snfPercentage}
+            name="snf_percentage"
+            value={formik.values.snf_percentage}
             onChange={formik.handleChange}
+            type="number"
           />
         </div>
       </div>
@@ -83,17 +102,18 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
       <Input
         variant="filled"
         placeholder="AADHAR NO"
-        name="aadharNumber"
-        value={formik.values.aadharNumber}
+        name="adhaar"
+        value={formik.values.adhaar}
         onChange={formik.handleChange}
+        type="number"
       />
 
       <p>Name of the bank</p>
       <Input
         variant="filled"
         placeholder="Name of the bank"
-        name="bankName"
-        value={formik.values.bankName}
+        name="bank_name"
+        value={formik.values.bank_name}
         onChange={formik.handleChange}
       />
 
@@ -101,8 +121,8 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
       <Input
         variant="filled"
         placeholder="Branch Name"
-        name="branchName"
-        value={formik.values.branchName}
+        name="branch_name"
+        value={formik.values.branch_name}
         onChange={formik.handleChange}
       />
 
@@ -110,17 +130,18 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
       <Input
         variant="filled"
         placeholder="Account Number"
-        name="accountNumber"
-        value={formik.values.accountNumber}
+        name="account_number"
+        value={formik.values.account_number}
         onChange={formik.handleChange}
+        type="number"
       />
 
       <p>IFSC Code</p>
       <Input
         variant="filled"
         placeholder="IFSC Code"
-        name="ifscCode"
-        value={formik.values.ifscCode}
+        name="ifsc_code"
+        value={formik.values.ifsc_code}
         onChange={formik.handleChange}
       />
 

@@ -10,7 +10,7 @@ const AddNewUser = () => {
     <div className="flex flex-col items-center px-2 py-3 relative overflow-y-auto">
   <ArrowBackIcon onClick={()=>{navigate('/')}} className="absolute left-5 top-4" />
   <p>Add New User</p>
-  <UserForm />
+  <UserForm shopId={localStorage.getItem('shopId')}/>
 </div>
   )
 }

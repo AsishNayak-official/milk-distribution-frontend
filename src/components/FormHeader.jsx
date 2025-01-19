@@ -16,6 +16,7 @@ const FormHeader = () => {
         setUpdatedStartDate(res?.data?.start_bill_date);
         setUpdatedEndDate(res?.data?.end_bill_date);
         setUpdatedMonth(res?.data?.month);
+        localStorage.setItem('shopId', res?.data?.id);
       })
       .catch((err) => {});
   }, []);
