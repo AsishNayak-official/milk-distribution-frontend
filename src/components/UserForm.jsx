@@ -10,7 +10,7 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
     initialValues: {
       name: userInfo?.name ?? "",
       membership_no: userInfo?.membership_no??"",
-      total_qty_milk_supplied: userInfo?.total_qty_milk_supplied??"",
+      milk_supplied: userInfo?.milk_supplied??"",
       fat_percentage: userInfo?.fat_percentage??"",
       snf_percentage: userInfo?.snf_percentage??"",
       adhaar: userInfo?.adhaar??"",
@@ -22,7 +22,7 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
     enableReinitialize: true,
     onSubmit: (values) => {
       if(userInfo){
-        updateUserInfo(shopId,values,userInfo?.id)
+        updateUserInfo(shopId,userInfo?.id,values)
         .then((res)=>{
           
         })
@@ -62,12 +62,12 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
         type="number"
       />
 
-      <p>Total Quantity of Milk supplied</p>
+      <p>Milk supplied(No of)</p>
       <Input
         variant="filled"
         placeholder="Total Quantity of Milk supplied"
-        name="total_qty_milk_supplied"
-        value={formik.values.total_qty_milk_supplied}
+        name="milk_supplied"
+        value={formik.values.milk_supplied}
         onChange={formik.handleChange}
         type="number"
       />

@@ -9,13 +9,11 @@ const NameCard = ({index,userInfo,shopId}) => {
   const [milkQty, setMilkQty] = useState("");
 
   useEffect(()=>{
-    setMilkQty(userInfo?.milk_supplied)
-    console.log("first")
+    setMilkQty(userInfo?.total_qty_milk_supplied)
   },[userInfo])
 
   const handleMilkQtyChange=(e)=>{
-    setMilkQty(e?.target?.value);
-    console.log("second")
+    setMilkQty((e?.target?.value === "")? null : e?.target?.value );
   }
 
   const updateMilkInfo=()=>{
@@ -34,7 +32,7 @@ const NameCard = ({index,userInfo,shopId}) => {
         <div className="flex flex-row gap-x-1 w-full items-center">
           <div className="w-1/2">{userInfo?.name}</div>
           <div className="w-1/2">
-            <Input variant="filled" placeholder="Milk in ltrs" value={milkQty} onBlur={updateMilkInfo} onChange={handleMilkQtyChange} />
+            <Input variant="filled" type="number" placeholder="Milk in ltrs" value={milkQty} onBlur={updateMilkInfo} onChange={handleMilkQtyChange} />
           </div>
         </div>
         <div>
