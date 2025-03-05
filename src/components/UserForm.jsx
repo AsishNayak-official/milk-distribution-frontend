@@ -21,15 +21,19 @@ const UserForm = ({disable=false,userInfo,shopId}) => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
+      const processData ={
+        ...values,
+        milk_supplied: values.milk_supplied === "" ? null : values.milk_supplied,
+      }
       if(userInfo){
-        updateUserInfo(shopId,userInfo?.id,values)
+        updateUserInfo(shopId,userInfo?.id,processData)
         .then((res)=>{
           
         })
         .catch((err)=>{})
       }
       else{
-        updateUserInfo(shopId,values)
+        updateUserInfo(shopId,processData)
         .then((res)=>{
       
         })

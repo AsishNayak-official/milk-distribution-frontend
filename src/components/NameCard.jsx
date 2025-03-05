@@ -17,7 +17,7 @@ const NameCard = ({index,userInfo,shopId}) => {
   }
 
   const updateMilkInfo=()=>{
-    updateUserInfo(shopId,userInfo?.id,{milk_supplied:milkQty})
+    updateUserInfo(shopId,userInfo?.id,{total_qty_milk_supplied:milkQty})
     .then((res)=>{
 
     })
