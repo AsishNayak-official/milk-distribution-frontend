@@ -1,7 +1,8 @@
-import { Input } from "@chakra-ui/react";
+"use client"
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { getShopDetails, updateBillDate } from "../api/shopdetailsApi";
+import { Input } from "./ui/input";
 
 const FormHeader = () => {
   const [shopDetails, setShopDetails] = useState();

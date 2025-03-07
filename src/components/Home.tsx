@@ -7,8 +7,8 @@ const Home = () => {
   return (
     <div className="flex flex-col gap-y-3">
       <FormHeader />
-      <AddNDownload />
-      <CardLayout />
+      {/* <AddNDownload />
+      <CardLayout /> */}
     </div>
   );
 };
