@@ -1,5 +1,3 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Input } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import UserForm from "./UserForm";
 import { updateUserInfo } from "../api/userDetailsApi";
@@ -36,7 +34,7 @@ const NameCard = ({index,userInfo,shopId}) => {
           </div>
         </div>
         <div>
-          <ChevronDownIcon onClick={()=>{setIsExpanded(!isExpanded)}} />
+          <Download  onClick={()=>{setIsExpanded(!isExpanded)}} />
         </div>
       </div>
       {isExpanded && <UserForm shopId={shopId} disable={true} userInfo={userInfo}/>}

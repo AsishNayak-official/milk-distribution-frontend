@@ -1,9 +1,8 @@
 "use client"
-import Home from "@/components/Home";
-import Image from "next/image";
+import Dashboard from "@/components/Dashboard";
 
 export default function Page() {
   return (
-    <Home/>
+    <Dashboard/>
   );
 }

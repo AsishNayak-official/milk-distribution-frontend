@@ -1,5 +1,4 @@
-import { Button, Input } from "@chakra-ui/react";
-import { useFormik } from "formik";
+// import { useFormik } from "formik";
 import React from "react";
 import { updateUserInfo } from "../api/userDetailsApi";
 

@@ -1,10 +1,8 @@
-import { AttachmentIcon, DownloadIcon } from "@chakra-ui/icons";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { downloadBillData } from "../api/shopdetailsApi";
+import { Paperclip,Download } from 'lucide-react';
 
 const AddNDownload = () => {
-  const navigate = useNavigate();
   const shop_id = localStorage.getItem("shopId");
   // Function to download the bill file
   const downloadBill = async () => {
@@ -43,18 +41,15 @@ const AddNDownload = () => {
   return (
     <div className="flex flex-row gap-x-2">
       <div
-        onClick={() => {
-          navigate("/add-user");
-        }}
         className="w-1/2  h-[7vh] border-2 border-green-400 p-2 rounded-xl flex justify-center items-center gap-x-3"
       >
-        Add User <AttachmentIcon />
+        Add User <Paperclip />
       </div>
       <div
         onClick={downloadBill}
         className="w-1/2 border-2 h-[7vh]  border-green-400 p-2 rounded-xl flex justify-center items-center gap-x-3"
       >
-        Download <DownloadIcon />
+        Download <Download />
       </div>
     </div>
   );
