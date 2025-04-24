@@ -1,5 +1,6 @@
 import { CustomDialog } from '@/input-components/CustomModal';
 import React, { FC } from 'react';
+import UserForm from './UserForm';
 
 interface IEditCustomerProps{
     showModal:boolean;
@@ -12,7 +13,7 @@ const EditCustomerInformation:FC<IEditCustomerProps> = ({showModal,setShowModal}
       isOpen={showModal}
       onOpenChange={setShowModal}
       header={<span>Asish Kumar Nayak</span>}
-      content={<div>THese are the details</div>}
+      content={<UserForm shopId={''}/>}
       />
   )
 }
