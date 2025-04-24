@@ -1,12 +1,10 @@
 import React from "react";
 import AddNDownload from "./AddNDownload";
 import CardLayout from "./CardLayout";
-import FormHeader from "./FormHeader";
 
 const Home = () => {
   return (
     <div className="flex flex-col gap-y-3">
-      <FormHeader />
       <AddNDownload />
       <CardLayout />
     </div>
