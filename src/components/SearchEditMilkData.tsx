@@ -20,7 +20,6 @@ const SearchEditMilkData = () => {
   
   const handleEdit = () => {
     setShowModal(true);
-    console.log("first");
   };
 
 //   const updateMilkInfo = (total_qty_milk_supplied:number) => {

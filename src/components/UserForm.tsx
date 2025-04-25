@@ -50,7 +50,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="flex flex-col gap-y-1 overflow-y-auto max-h-[80vh] sm:w-[60vw] 2xl:w-[40vw] w-[80vw]"
+      className="flex flex-col gap-y-1 overflow-y-auto max-h-[80vh] sm:w-[60vw] 2xl:w-[40vw] w-[80vw] p-1"
       style={{ scrollbarWidth: "none" }}
     >
       <div className="flex flex-col sm:flex-row w-full gap-x-4">
