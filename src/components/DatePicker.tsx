@@ -15,10 +15,11 @@ interface IDatePickerProps {
     date: Date | undefined;
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
     className:string;
+    onBlur:()=>void;
   }
   
 
-export const DatePicker: FC<IDatePickerProps> = ({ date, setDate,className }) => {
+export const DatePicker: FC<IDatePickerProps> = ({ date, setDate,className,onBlur }) => {
 
   return (
     <Popover>
@@ -31,6 +32,7 @@ export const DatePicker: FC<IDatePickerProps> = ({ date, setDate,className }) =>
           selected={date}
           onSelect={setDate}
           initialFocus
+          onDayBlur={onBlur}
         />
       </PopoverContent>
     </Popover>

@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
 import SubHeader from "./SubHeader";
 import SearchEditMilkData from "./SearchEditMilkData";
-import OwnerInfo from "./OwnerInfo";
+import OwnerInfo from "./ShopInfo";
 import DownloadFile from "./DownloadFile";
 
 const Dashboard = () => {

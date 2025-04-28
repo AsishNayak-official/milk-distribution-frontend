@@ -1,5 +1,5 @@
 // import { useFormik } from "formik";
-import { UserInfo } from "@/lib/utils";
+import { UserInfo } from "@/lib/types";
 import { useFormik } from "formik";
 import { FC } from "react";
 import { Input } from "./ui/input";
