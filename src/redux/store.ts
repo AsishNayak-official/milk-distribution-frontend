@@ -2,11 +2,13 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import shopReducer from './actions/shopSlice';
+import utilityReducer from './actions/utilitySlice';
 
 
 export const store = configureStore({
   reducer: {
     shopInfo: shopReducer,
+    utility : utilityReducer,
   },
 });
 

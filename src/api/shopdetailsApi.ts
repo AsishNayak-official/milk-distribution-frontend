@@ -7,8 +7,8 @@ export const getShopDetails = async () => {
   return res.data;
 };
 
-export const updateStartDate = async (id: string, start_bill_date: string) => {
-  const res = await axios.patch(`/shop/${id}`, {start_bill_date});
+export const updateStartDate = async (id: string, start_bill_date: string,month:string) => {
+  const res = await axios.patch(`/shop/${id}`, {start_bill_date,month});
   return res.data;
 };
 export const updateEndDate = async (id: string, end_bill_date: string) => {

@@ -1,5 +1,5 @@
 export interface UserInfo {
-    id:string;
+    id?:string;
     name: string;
     membership_no: string;
     milk_supplied: string;

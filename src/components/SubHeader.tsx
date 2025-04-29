@@ -15,6 +15,7 @@ const SubHeader = () => {
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const {customerCount,milkSuppliedCount} = useAppSelector((state)=> state.utility)
 
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const SubHeader = () => {
 
   const handleStartDateChange = () => {
     if (startDate) {
-      updateStartDate(shopInfo.id, startDate.toISOString())
+      updateStartDate(shopInfo.id, startDate.toISOString(), dayjs(startDate).format('MMMM'))
         .then(() => {})
         .catch(() => {});
     }
@@ -69,9 +70,9 @@ const SubHeader = () => {
       <div className="flex flex-col border w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-black to-gray-800 relative">
         <ChartSpline className={"absolute right-5"} />
         <span className="text-sm">Total Collection</span>
-        <span className="text-2xl">07,2025</span>
+        <span className="text-2xl">{milkSuppliedCount.toFixed(2)} Ltrs.</span>
         <span className="text-sm text-gray-500">
-          Cost estimation around $2025(approx)
+          Cost Estimation : Rs.{(milkSuppliedCount * 3).toFixed(2)}(approx)
         </span>
       </div>
       <div
@@ -82,7 +83,7 @@ const SubHeader = () => {
       >
         <Users className={"absolute right-5"} />
         <span className="text-sm">Add Customer</span>
-        <span className="text-2xl">2025</span>
+        <span className="text-2xl">{customerCount}</span>
         <span className="text-sm text-gray-500">Click to add new customer</span>
       </div>
       {showModal && (

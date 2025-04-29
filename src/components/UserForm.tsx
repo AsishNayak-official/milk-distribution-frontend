@@ -4,14 +4,16 @@ import { useFormik } from "formik";
 import { FC } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { createCustomer, updateCustomer } from "@/api/customerApi";
+import { useAppSelector } from "@/redux/hooks/redux.hooks";
 
 interface IUserFormProps {
   userInfo?: UserInfo;
-  shopId: string;
 }
 
 const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
   //call api for details fetch here
+  const shopId = useAppSelector((state) => state.shopInfo.shop.id);
 
   const formik = useFormik({
     initialValues: {
@@ -25,24 +27,19 @@ const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
       branch_name: userInfo?.branch_name ?? "",
       account_number: userInfo?.account_number ?? "",
       ifsc_code: userInfo?.ifsc_code ?? "",
+      shop_id: shopId,
     },
     enableReinitialize: true,
-    onSubmit: () => {
-      // const processData = {
-      //   ...values,
-      //   milk_supplied:
-      //     values.milk_supplied === "" ? null : values.milk_supplied,
-      // };
+    onSubmit: (values) => {
       if (userInfo) {
-        // updateUserInfo(shopId,userInfo?.id,processData)
-        // .then((res)=>{
-        // })
-        // .catch((err)=>{})
+        updateCustomer(userInfo?.id??'', values)
+          .then(() => {})
+          .catch(() => {});
       } else {
-        // updateUserInfo(shopId,processData)
-        // .then((res)=>{
-        // })
-        // .catch((err)=>{})
+        console.log({ values });
+        createCustomer(values)
+          .then(() => {})
+          .catch(() => {});
       }
     },
   });

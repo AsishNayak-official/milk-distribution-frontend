@@ -6,9 +6,10 @@ export async function GET(
   context: { params: { id: string } }
 ) {
   try {
+    const { id } = await context.params;
     const query = `SELECT * FROM customers WHERE id = ?`;
-    const result = await apiGet(query.replace("?", `'${context.params.id}'`));
-    return NextResponse.json(result, { status: 200 });
+    const result = await apiGet(query.replace("?", `'${id}'`));
+    return NextResponse.json(result[0], { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
@@ -22,6 +23,7 @@ export async function PATCH(
   context: { params: { id: string } }
 ) {
   try {
+    const { id } = await context.params;
     const body = await req.json();
     const fields = Object.keys(body)
       .filter((key) => key !== "id")
@@ -34,7 +36,7 @@ export async function PATCH(
       .map((key) => body[key]);
 
 
-    values.push(context.params.id);
+    values.push(id);
     const query = `UPDATE customers SET ${fields} WHERE id = ?`;
     await apiPatch(query, values);
     return NextResponse.json({ success: true }, { status: 200 });

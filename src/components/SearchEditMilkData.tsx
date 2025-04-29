@@ -1,5 +1,6 @@
 import { MoveUpRight } from "lucide-react";
 
+import { getCustomers, updateCustomer } from "@/api/customerApi";
 import {
   Command,
   CommandEmpty,
@@ -9,24 +10,55 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { UserInfo } from "@/lib/types";
+import { useEffect, useState } from "react";
 import EditCustomerInformation from "./EditCustomerInformation";
-import { useState } from "react";
-import { Input } from "./ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { useAppDispatch } from "@/redux/hooks/redux.hooks";
+import { updateCounter } from "@/redux/actions/utilitySlice";
 
 const SearchEditMilkData = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [customerList, setCustomerList] = useState<UserInfo[]>([]);
+  const [selectedId, setSelectedId] = useState<string>("");
+
+  const dispatch = useAppDispatch();
+
   
   const handleEdit = () => {
     setShowModal(true);
   };
 
-//   const updateMilkInfo = (total_qty_milk_supplied:number) => {
-//     // updateUserInfo(shopId, userInfo?.id, { total_qty_milk_supplied: milkQty })
-//     //   .then((res) => {})
-//     //   .catch((err) => {});
-//   };
+  const updateMilkInfo = (customer: UserInfo) => {
+    updateCustomer(customer?.id ?? "", customer)
+      .then(() => {})
+      .catch(() => {});
+    };
+    
+    useEffect(() => {
+      getCustomers()
+      .then((res) => {
+        setCustomerList(res ?? []);
+        const milkSuppliedCount = res?.reduce((total:number, customer:UserInfo) => {
+          return total + parseFloat(customer?.milk_supplied || "0");
+        }, 0);
+        dispatch(updateCounter({customerCount: res?.length, milkSuppliedCount}))
+      })
+      .catch(() => {});
+  }, []);
+
+  console.log({ selectedId });
+
+  const handleMilkChange = (id: string, value: string) => {
+    setCustomerList((prevList) =>
+      prevList.map((customer) =>
+        customer.id === id ? { ...customer, milk_supplied: value } : customer
+      )
+    );
+  };
+
   return (
     <>
       <Command className="rounded-lg border shadow-md md:min-w-[450px]">
@@ -34,235 +66,65 @@ const SearchEditMilkData = () => {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Customers (10)">
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">F Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
+            {customerList.map((customer) => (
+              <CommandItem
+                key={customer?.id}
+                onSelect={() => setSelectedId(customer?.id ?? "")}
+              >
+                <div className="flex flex-col sm:flex-row justify-between w-full items-center">
+                  <div className="flex flex-row justify-between w-full sm:w-auto items-center">
+                    <div className="flex items-center gap-4 flex-row">
+                      <Avatar>
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col gap-y-0">
+                        <span className="leading-tight">
+                          {customer?.name ?? ""}
+                        </span>
+                        <span>Member ID: {customer?.membership_no ?? ""}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <Button
+                        className="sm:hidden bg-transparent hover:bg-transparent"
+                        onClick={handleEdit}
+                      >
+                        <MoveUpRight />
+                      </Button>
                     </div>
                   </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
+                  <Input
+                    type="number"
+                    className="w-[60%] sm:w-[30%]"
+                    placeholder="Milk in ltrs"
+                    value={customer?.milk_supplied ?? ""}
+                    onChange={(e) =>
+                      handleMilkChange(customer?.id ?? "", e.target.value)
+                    }
+                    onBlur={() => {
+                      updateMilkInfo(customer);
+                    }}
+                  />
+                  <Button
+                    className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
+                    onClick={handleEdit}
+                  >
+                    <MoveUpRight />
+                  </Button>
                 </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">E Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">D Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">C Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">B Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            <CommandItem onSelect={(e) => console.log({ e })}>
-              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
-                <div className="flex flex-row justify-between w-full sm:w-auto items-center">
-                  <div className="flex items-center gap-4 flex-row">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col gap-y-0">
-                      <span className="leading-tight">A Nayak</span>
-                      <span>asish.nayak@eximietas.design</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button className="sm:hidden bg-transparent hover:bg-transparent" onClick={handleEdit}>
-                      <MoveUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <Input
-                  type="number"
-                  className="w-[60%] sm:w-[30%]"
-                  placeholder="Milk in ltrs"
-                //   value={indexed.total_qty_milk_supplied}
-                //   onBlur={()=> {updateMilkInfo(indexed.total_qty_milk_supplied)}}
-                />
-                <Button
-                  className="hidden sm:block cursor-pointer bg-transparent hover:bg-transparent"
-                  onClick={handleEdit}
-                >
-                  <MoveUpRight />
-                </Button>
-              </div>
-            </CommandItem>
-            
+              </CommandItem>
+            ))}
           </CommandGroup>
           <CommandSeparator />
         </CommandList>
       </Command>
       {showModal && (
         <EditCustomerInformation
+          selectedId={selectedId}
           showModal={showModal}
           setShowModal={setShowModal}
         />
