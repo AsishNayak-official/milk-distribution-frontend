@@ -19,6 +19,14 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+
+    if (!body.membership_no) {
+      return NextResponse.json(
+        { error: "Membership number is required." },
+        { status: 400 }
+      );
+    }
+    
     const id = uuidv4();
     const query = `INSERT INTO customers (
         id, shop_id, name, membership_no, milk_supplied, fat_percentage, snf_percentage,

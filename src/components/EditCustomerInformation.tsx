@@ -33,8 +33,8 @@ const EditCustomerInformation:FC<IEditCustomerProps> = ({showModal,setShowModal,
       <CustomDialog
       isOpen={showModal}
       onOpenChange={setShowModal}
-      header={<span>Asish Kumar Nayak</span>}
-      content={<UserForm userInfo={userInfo}/>}
+      header={<span>Add / Edit Customer Information</span>}
+      content={<UserForm setShowModal={setShowModal} userInfo={userInfo}/>}
       />
   )
 }

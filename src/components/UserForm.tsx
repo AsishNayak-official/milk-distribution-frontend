@@ -9,9 +9,10 @@ import { useAppSelector } from "@/redux/hooks/redux.hooks";
 
 interface IUserFormProps {
   userInfo?: UserInfo;
+  setShowModal:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
+const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
   //call api for details fetch here
   const shopId = useAppSelector((state) => state.shopInfo.shop.id);
 
@@ -33,12 +34,11 @@ const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
     onSubmit: (values) => {
       if (userInfo) {
         updateCustomer(userInfo?.id??'', values)
-          .then(() => {})
+          .then(() => {setShowModal(false)})
           .catch(() => {});
       } else {
-        console.log({ values });
         createCustomer(values)
-          .then(() => {})
+          .then(() => {setShowModal(false)})
           .catch(() => {});
       }
     },
@@ -69,6 +69,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
             value={formik.values.membership_no}
             onChange={formik.handleChange}
             type="number"
+            disabled={!!(userInfo?.id)}
           />
         </div>
       </div>
@@ -159,7 +160,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo }) => {
         </div>
       </div>
 
-      <Button className="mt-2" type="submit">
+      <Button className="mt-2" type="submit" >
         Update Details
       </Button>
     </form>

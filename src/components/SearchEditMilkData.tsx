@@ -49,7 +49,6 @@ const SearchEditMilkData = () => {
       .catch(() => {});
   }, []);
 
-  console.log({ selectedId });
 
   const handleMilkChange = (id: string, value: string) => {
     setCustomerList((prevList) =>
@@ -65,7 +64,7 @@ const SearchEditMilkData = () => {
         <CommandInput placeholder="Search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Customers (10)">
+          <CommandGroup heading={`Customers (${customerList?.length})`}>
             {customerList.map((customer) => (
               <CommandItem
                 key={customer?.id}
