@@ -80,11 +80,11 @@ const SearchEditMilkData = () => {
                         />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col gap-y-0">
-                        <span className="leading-tight">
+                      <div className="flex flex-col gap-y-0 w-60">
+                        <span className="leading-tight truncate">
                           {customer?.name ?? ""}
                         </span>
-                        <span>Member ID: {customer?.membership_no ?? ""}</span>
+                        <span className="text-xs truncate">Member ID: {customer?.membership_no ?? ""}</span>
                       </div>
                     </div>
                     <div>

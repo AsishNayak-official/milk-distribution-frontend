@@ -1,12 +1,13 @@
 import { updateEndDate, updateStartDate } from "@/api/shopdetailsApi";
 import { ShopInfo } from "@/lib/types";
-import { useAppSelector } from "@/redux/hooks/redux.hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/redux.hooks";
 import { RootState } from "@/redux/store";
 import dayjs from "dayjs";
 import { ChartSpline, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DatePicker } from "./DatePicker";
 import EditCustomerInformation from "./EditCustomerInformation";
+import { setShop } from "@/redux/actions/shopSlice";
 
 const SubHeader = () => {
   const shopInfo: ShopInfo = useAppSelector(
@@ -16,7 +17,7 @@ const SubHeader = () => {
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const {customerCount,milkSuppliedCount} = useAppSelector((state)=> state.utility)
-
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setStartDate(dayjs(shopInfo.start_bill_date).toDate());
@@ -26,14 +27,18 @@ const SubHeader = () => {
   const handleStartDateChange = () => {
     if (startDate) {
       updateStartDate(shopInfo.id, startDate.toISOString(), dayjs(startDate).format('MMMM'))
-        .then(() => {})
+        .then((res) => {
+          dispatch(setShop(res.data));
+        })
         .catch(() => {});
-    }
-  };
-  const handleEndDateChange = () => {
-    if (endDate) {
-      updateEndDate(shopInfo.id, endDate.toISOString())
-        .then(() => {})
+      }
+    };
+    const handleEndDateChange = () => {
+      if (endDate) {
+        updateEndDate(shopInfo.id, endDate.toISOString())
+        .then((res) => {
+          dispatch(setShop(res.data));
+        })
         .catch(() => {});
     }
   };

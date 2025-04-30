@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiPatch } from "../../database";
+import { apiGet, apiPatch } from "../../database";
 
 export async function PATCH(
   req: NextRequest,
@@ -22,7 +22,8 @@ export async function PATCH(
     values.push(id);
     const query = `UPDATE shop SET ${fields} WHERE id = ?`;
     await apiPatch(query, values);
-    return NextResponse.json({ success: true }, { status: 200 });
+    const result = await apiGet("SELECT * FROM shop");
+    return NextResponse.json({ success: true,data : result[0] }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
