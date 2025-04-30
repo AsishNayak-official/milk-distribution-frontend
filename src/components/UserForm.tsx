@@ -21,6 +21,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
       name: userInfo?.name ?? "",
       membership_no: userInfo?.membership_no ?? "",
       milk_supplied: userInfo?.milk_supplied ?? "",
+      total_qty_milk_supplied: userInfo?.total_qty_milk_supplied ?? "",
       fat_percentage: userInfo?.fat_percentage ?? "",
       snf_percentage: userInfo?.snf_percentage ?? "",
       adhaar: userInfo?.adhaar ?? "",
@@ -75,17 +76,30 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full gap-x-4">
-        <div className="sm:w-1/3 w-full">
+        <div className="sm:w-1/2 w-full">
           <span className="text-sm">Milk supplied(No of)</span>
           <Input
-            placeholder="Total Quantity of Milk supplied"
+            placeholder="Milk supplied(No of)"
             name="milk_supplied"
             value={formik.values.milk_supplied}
             onChange={formik.handleChange}
             type="number"
           />
         </div>
-        <div className="sm:w-1/3 w-full">
+        <div className="sm:w-1/2 w-full">
+          <span className="text-sm"> Total Qty Of Milk Supplied</span>
+          <Input
+            placeholder="Total Quantity of Milk supplied"
+            name="milk_supplied"
+            value={formik.values.total_qty_milk_supplied}
+            onChange={formik.handleChange}
+            type="number"
+          />
+        </div>
+        </div>
+        <span>Average</span>
+      <div className="flex flex-col sm:flex-row w-full gap-x-4">
+        <div className="sm:w-1/2 w-full">
           <span className="text-sm">Fat%</span>
           <Input
             placeholder="Fat%"
@@ -95,7 +109,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
             type="number"
           />
         </div>
-        <div className="sm:w-1/3 w-full">
+        <div className="sm:w-1/2 w-full">
           <span className="text-sm">SNF%</span>
           <Input
             placeholder="SNF%"

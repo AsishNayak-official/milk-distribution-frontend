@@ -3,6 +3,7 @@ export interface UserInfo {
     name: string;
     membership_no: string;
     milk_supplied: string;
+    total_qty_milk_supplied: string;
     fat_percentage: string;
     snf_percentage: string;
     adhaar: string;
