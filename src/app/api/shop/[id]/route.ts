@@ -3,10 +3,10 @@ import { apiGet, apiPatch } from "../../database";
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }
 ) {
   try {
-    const { id } = await context.params;
+    const  id = await params['id'];
     const body = await req.json();
 
     const fields = Object.keys(body)

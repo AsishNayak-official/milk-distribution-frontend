@@ -76,11 +76,11 @@ export async function GET() {
     };
 
     // Split customers into pages
-    const pages = [];
+    const pages: UserInfo[][] = [];
     for (let i = 0; i < customers.length; i += PAGE_ROWS) {
-      const chunk = customers.slice(i, i + PAGE_ROWS);
+      const chunk: UserInfo[] = customers.slice(i, i + PAGE_ROWS);
       while (chunk.length < PAGE_ROWS) {
-        chunk.push({}); // Fill with empty rows if fewer than 15
+        chunk.push({}  as UserInfo); // Fill with empty rows if fewer than 15
       }
       pages.push(chunk);
     }

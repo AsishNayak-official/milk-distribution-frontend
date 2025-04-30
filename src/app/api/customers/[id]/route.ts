@@ -3,10 +3,10 @@ import { apiGet, apiPatch } from "../../database";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }
 ) {
   try {
-    const { id } = await context.params;
+    const id  = await params['id'];
     const query = `SELECT * FROM customers WHERE id = ?`;
     const result = await apiGet(query.replace("?", `'${id}'`));
     return NextResponse.json(result[0], { status: 200 });
@@ -20,10 +20,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  {params}
 ) {
   try {
-    const { id } = await context.params;
+    const id  = await params['id'];
     const body = await req.json();
     const fields = Object.keys(body)
       .filter((key) => key !== "id")

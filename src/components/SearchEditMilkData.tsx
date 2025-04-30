@@ -47,7 +47,7 @@ const SearchEditMilkData = () => {
         dispatch(updateCounter({customerCount: res?.length, milkSuppliedCount}))
       })
       .catch(() => {});
-  }, []);
+  }, [dispatch]);
 
 
   const handleMilkChange = (id: string, value: string) => {
