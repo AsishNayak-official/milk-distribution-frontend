@@ -6,7 +6,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   try {
     await dbConnect();
 
-    const id = params['id']; 
+    const id = params.id; 
     const body = await req.json(); 
 
     const updatedShop = await Shop.findByIdAndUpdate(id, body, { new: true });

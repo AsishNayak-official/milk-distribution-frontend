@@ -22,5 +22,4 @@ export interface ShopInfo {
     start_bill_date: string;
     end_bill_date: string;
     created_at: string;
-}
-  
+}  

@@ -3,7 +3,7 @@ import { getShopDetails } from "@/api/shopdetailsApi";
 import { ShopInfo } from '@/lib/types';
 
   const emptyShop: ShopInfo = {
-    id: "",
+    _id: "",
     society_name: "",
     society_code: "",
     unit: "",

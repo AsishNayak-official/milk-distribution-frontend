@@ -1,10 +1,10 @@
+import dbConnect from "@/lib/db";
+import { UserInfo } from "@/lib/types";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { NextResponse } from "next/server";
-import { ShopInfo, UserInfo } from "@/lib/types";
-import dbConnect from "@/lib/db";
-import { Shop } from "../models/Shop";
 import { Customer } from "../models/Customers";
+import { Shop } from "../models/Shop";
 
 export async function GET() {
   try {

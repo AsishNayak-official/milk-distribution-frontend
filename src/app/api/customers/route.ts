@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
 import { Customer } from "../models/Customers";
 import dbConnect from "@/lib/db";
 
@@ -28,11 +27,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const id = uuidv4();
-    const query = `INSERT INTO customers (
-        id, shop_id, name, membership_no, milk_supplied, fat_percentage, snf_percentage,
-        adhaar, bank_name, branch_name, account_number, ifsc_code, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const customer = new Customer({
       shop_id: body.shop_id ?? null,
       name: body.name,
