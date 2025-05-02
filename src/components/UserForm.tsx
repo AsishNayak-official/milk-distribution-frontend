@@ -14,7 +14,7 @@ interface IUserFormProps {
 
 const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
   //call api for details fetch here
-  const shopId = useAppSelector((state) => state.shopInfo.shop.id);
+  const shopId = useAppSelector((state) => state.shopInfo.shop._id);
 
   const formik = useFormik({
     initialValues: {
@@ -34,7 +34,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
     enableReinitialize: true,
     onSubmit: (values) => {
       if (userInfo) {
-        updateCustomer(userInfo?.id??'', values)
+        updateCustomer(userInfo?._id??'', values)
           .then(() => {setShowModal(false)})
           .catch(() => {});
       } else {
@@ -70,7 +70,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
             value={formik.values.membership_no}
             onChange={formik.handleChange}
             type="number"
-            disabled={!!(userInfo?.id)}
+            disabled={!!(userInfo?._id)}
           />
         </div>
       </div>
@@ -90,7 +90,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
           <span className="text-sm"> Total Qty Of Milk Supplied</span>
           <Input
             placeholder="Total Quantity of Milk supplied"
-            name="milk_supplied"
+            name="total_qty_milk_supplied"
             value={formik.values.total_qty_milk_supplied}
             onChange={formik.handleChange}
             type="number"

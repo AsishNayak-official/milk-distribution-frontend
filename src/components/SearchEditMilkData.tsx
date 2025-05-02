@@ -26,34 +26,37 @@ const SearchEditMilkData = () => {
 
   const dispatch = useAppDispatch();
 
-  
   const handleEdit = () => {
     setShowModal(true);
   };
 
   const updateMilkInfo = (customer: UserInfo) => {
-    updateCustomer(customer?.id ?? "", customer)
+    updateCustomer(customer?._id ?? "", customer)
       .then(() => {})
       .catch(() => {});
-    };
-    
-    useEffect(() => {
-      getCustomers()
+  };
+
+  useEffect(() => {
+    getCustomers()
       .then((res) => {
         setCustomerList(res ?? []);
-        const milkSuppliedCount = res?.reduce((total:number, customer:UserInfo) => {
-          return total + parseFloat(customer?.milk_supplied || "0");
-        }, 0);
-        dispatch(updateCounter({customerCount: res?.length, milkSuppliedCount}))
+        const milkSuppliedCount = res?.reduce(
+          (total: number, customer: UserInfo) => {
+            return total + parseFloat(customer?.milk_supplied || "0");
+          },
+          0
+        );
+        dispatch(
+          updateCounter({ customerCount: res?.length, milkSuppliedCount })
+        );
       })
       .catch(() => {});
   }, [dispatch]);
 
-
   const handleMilkChange = (id: string, value: string) => {
     setCustomerList((prevList) =>
       prevList.map((customer) =>
-        customer.id === id ? { ...customer, milk_supplied: value } : customer
+        customer._id === id ? { ...customer, milk_supplied: value } : customer
       )
     );
   };
@@ -67,8 +70,8 @@ const SearchEditMilkData = () => {
           <CommandGroup heading={`Customers (${customerList?.length})`}>
             {customerList.map((customer) => (
               <CommandItem
-                key={customer?.id}
-                onSelect={() => setSelectedId(customer?.id ?? "")}
+                key={customer?._id}
+                onSelect={() => setSelectedId(customer?._id ?? "")}
               >
                 <div className="flex flex-col sm:flex-row justify-between w-full items-center">
                   <div className="flex flex-row justify-between w-full sm:w-auto items-center">
@@ -84,7 +87,9 @@ const SearchEditMilkData = () => {
                         <span className="leading-tight truncate">
                           {customer?.name ?? ""}
                         </span>
-                        <span className="text-xs truncate">Member ID: {customer?.membership_no ?? ""}</span>
+                        <span className="text-xs truncate">
+                          Member ID: {customer?.membership_no ?? ""}
+                        </span>
                       </div>
                     </div>
                     <div>
@@ -102,7 +107,7 @@ const SearchEditMilkData = () => {
                     placeholder="Milk in ltrs"
                     value={customer?.milk_supplied ?? ""}
                     onChange={(e) =>
-                      handleMilkChange(customer?.id ?? "", e.target.value)
+                      handleMilkChange(customer?._id ?? "", e.target.value)
                     }
                     onBlur={() => {
                       updateMilkInfo(customer);

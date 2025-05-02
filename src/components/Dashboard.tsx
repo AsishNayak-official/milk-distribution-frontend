@@ -5,8 +5,15 @@ import SubHeader from "./SubHeader";
 import SearchEditMilkData from "./SearchEditMilkData";
 import OwnerInfo from "./ShopInfo";
 import DownloadFile from "./DownloadFile";
+import { clearCustomers } from "@/api/customerApi";
 
 const Dashboard = () => {
+
+  const handleReset =()=>{
+    clearCustomers()
+    .then(()=>{})
+    .catch(()=>{})
+  }
   return (
     <div>
       {/* Navbar */}
@@ -15,7 +22,7 @@ const Dashboard = () => {
           <span className="text-2xl font-semibold">Diary Management</span>
         </div>
         <div className="flex items-center gap-4 sm:flex-row flex-row-reverse">
-          <RefreshCcw />
+          <RefreshCcw onClick={handleReset}/>
           <Separator orientation="vertical" />
           <div className="flex flex-row items-center gap-x-2">
           <Avatar>

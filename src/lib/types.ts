@@ -1,5 +1,5 @@
 export interface UserInfo {
-    id?:string;
+    _id?:string;
     name: string;
     membership_no: string;
     milk_supplied: string;
@@ -14,7 +14,7 @@ export interface UserInfo {
   }
 
 export interface ShopInfo {
-    id: string;
+    _id: string;
     society_name: string;
     society_code: string;
     unit: string;

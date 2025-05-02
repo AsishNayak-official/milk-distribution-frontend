@@ -1,12 +1,13 @@
-import { apiGet, apiPost } from "../database";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import { Customer } from "../models/Customers";
+import dbConnect from "@/lib/db";
 
 export async function GET() {
-  const query = `SELECT * from customers`;
   try {
-    const result = await apiGet(query);
-    return NextResponse.json(result, { status: 200 });
+    await dbConnect();
+    const customers = await Customer.find();
+    return NextResponse.json(customers, { status: 200 });
   } catch (error) {
     console.error("GET /customers error:", error);
     return NextResponse.json(
@@ -19,35 +20,34 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
+    await dbConnect();
     if (!body.membership_no) {
       return NextResponse.json(
         { error: "Membership number is required." },
         { status: 400 }
       );
     }
-    
+
     const id = uuidv4();
     const query = `INSERT INTO customers (
         id, shop_id, name, membership_no, milk_supplied, fat_percentage, snf_percentage,
         adhaar, bank_name, branch_name, account_number, ifsc_code, created_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const values = [
-      id,
-      body.shop_id ?? null,
-      body.name,
-      body.membership_no,
-      body.milk_supplied,
-      body.fat_percentage || 0,
-      body.snf_percentage || 0,
-      body.adhaar,
-      body.bank_name,
-      body.branch_name,
-      body.account_number,
-      body.ifsc_code,
-      new Date().toISOString(), // sets created_at
-    ];
-    await apiPost(query, values);
+    const customer = new Customer({
+      shop_id: body.shop_id ?? null,
+      name: body.name,
+      membership_no: body.membership_no,
+      milk_supplied: body.milk_supplied,
+      fat_percentage: body.fat_percentage || 0,
+      snf_percentage: body.snf_percentage || 0,
+      adhaar: body.adhaar,
+      bank_name: body.bank_name,
+      branch_name: body.branch_name,
+      account_number: body.account_number,
+      ifsc_code: body.ifsc_code,
+      created_at: new Date(),
+    });
+    await customer.save();
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

@@ -1,13 +1,31 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { NextResponse } from "next/server";
-import { apiGet } from "../database";
-import { UserInfo } from "@/lib/types";
+import { ShopInfo, UserInfo } from "@/lib/types";
+import dbConnect from "@/lib/db";
+import { Shop } from "../models/Shop";
+import { Customer } from "../models/Customers";
 
 export async function GET() {
   try {
-    const shop = await apiGet("SELECT * FROM shop");
-    const customers = await apiGet("SELECT * FROM customers");
+    await dbConnect;
+
+    const shop = await Shop.findOne().lean();
+    const rawCustomers = await Customer.find().lean();
+
+    const customers: UserInfo[] = rawCustomers.map((cust: any) => ({
+      name: cust.name ?? "",
+      membership_no: cust.membership_no ?? "",
+      milk_supplied: cust.milk_supplied ?? "",
+      total_qty_milk_supplied: cust.total_qty_milk_supplied ?? "",
+      fat_percentage: cust.fat_percentage ?? "",
+      snf_percentage: cust.snf_percentage ?? "",
+      adhaar: cust.adhaar ?? "",
+      bank_name: cust.bank_name ?? "",
+      branch_name: cust.branch_name ?? "",
+      account_number: cust.account_number ?? "",
+      ifsc_code: cust.ifsc_code ?? "",
+    }));
 
     const doc = new jsPDF({
       orientation: "landscape",
@@ -42,14 +60,14 @@ export async function GET() {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      doc.text(`Society Name: - ${shop[0].society_name}`, 3, 3);
-      doc.text(`Society Code: - ${shop[0].society_code}`, 13, 3);
-      doc.text(`Unit: - ${shop[0].unit}`, 25, 3);
-      doc.text(`Month:-   ${shop[0].month}`, 2, 3.7);
-      const startDate = new Date(shop[0].start_bill_date).toLocaleDateString(
+      doc.text(`Society Name: - ${shop?.[0].society_name}`, 3, 3);
+      doc.text(`Society Code: - ${shop?.[0].society_code}`, 13, 3);
+      doc.text(`Unit: - ${shop?.[0].unit}`, 25, 3);
+      doc.text(`Month:-   ${shop?.[0].month}`, 2, 3.7);
+      const startDate = new Date(shop?.[0].start_bill_date).toLocaleDateString(
         "en-GB"
       ); // DD/MM/YYYY
-      const endDate = new Date(shop[0].end_bill_date).toLocaleDateString(
+      const endDate = new Date(shop?.[0].end_bill_date).toLocaleDateString(
         "en-GB"
       );
       doc.text(
@@ -80,7 +98,7 @@ export async function GET() {
     for (let i = 0; i < customers.length; i += PAGE_ROWS) {
       const chunk: UserInfo[] = customers.slice(i, i + PAGE_ROWS);
       while (chunk.length < PAGE_ROWS) {
-        chunk.push({}  as UserInfo); // Fill with empty rows if fewer than 15
+        chunk.push({} as UserInfo); // Fill with empty rows if fewer than 15
       }
       pages.push(chunk);
     }
@@ -152,7 +170,7 @@ export async function GET() {
         headStyles: {
           fillColor: [255, 255, 255],
           lineWidth: 0.02,
-          fontStyle:'normal',
+          fontStyle: "normal",
           lineColor: [0, 0, 0],
           cellPadding: 0.2,
         },

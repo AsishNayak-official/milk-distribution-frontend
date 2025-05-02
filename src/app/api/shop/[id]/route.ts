@@ -1,33 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiGet, apiPatch } from "../../database";
+import dbConnect from "@/lib/db";
+import { Shop } from "../../models/Shop";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const  id = await params['id'];
-    const body = await req.json();
+    await dbConnect();
 
-    const fields = Object.keys(body)
-      .filter((key) => key !== "id")
-      .map((key) => `${key} = ?`)
-      .join(", ");
+    const id = params['id']; 
+    const body = await req.json(); 
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const values: any[] = Object.keys(body)
-      .filter((key) => key !== "id")
-      .map((key) => body[key]);
+    const updatedShop = await Shop.findByIdAndUpdate(id, body, { new: true });
 
-    values.push(id);
-    const query = `UPDATE shop SET ${fields} WHERE id = ?`;
-    await apiPatch(query, values);
-    const result = await apiGet("SELECT * FROM shop");
-    return NextResponse.json({ success: true,data : result[0] }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 500 }
-    );
+    if (!updatedShop) {
+      return NextResponse.json({ error: 'Shop not found' }, { status: 400 });
+    }
+
+    // Return the updated shop document
+    return NextResponse.json({ success: true, data: updatedShop }, { status: 200 });
+
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

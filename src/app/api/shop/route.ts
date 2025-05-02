@@ -1,15 +1,16 @@
-import { NextResponse } from "next/server";
-import { apiGet } from "../database";
+// app/api/shop/route.ts
+
+import { NextResponse } from 'next/server';
+import  dbConnect from '@/lib/db';
+import { Shop } from '../models/Shop';
 
 export async function GET() {
   try {
-    const result = await apiGet("SELECT * FROM shop");
-    return NextResponse.json(result[0], { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 500 }
-    );
+    await dbConnect();
+    
+    const result = await Shop.find().lean(); // .lean() gives plain JS objects
+    return NextResponse.json(result[0], { status: 200 }); // Return the first shop
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-

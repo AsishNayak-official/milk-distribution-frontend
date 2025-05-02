@@ -26,7 +26,7 @@ const SubHeader = () => {
 
   const handleStartDateChange = () => {
     if (startDate) {
-      updateStartDate(shopInfo.id, startDate.toISOString(), dayjs(startDate).format('MMMM'))
+      updateStartDate(shopInfo._id, startDate.toISOString(), dayjs(startDate).format('MMMM'))
         .then((res) => {
           dispatch(setShop(res.data));
         })
@@ -35,7 +35,7 @@ const SubHeader = () => {
     };
     const handleEndDateChange = () => {
       if (endDate) {
-        updateEndDate(shopInfo.id, endDate.toISOString())
+        updateEndDate(shopInfo._id, endDate.toISOString())
         .then((res) => {
           dispatch(setShop(res.data));
         })
