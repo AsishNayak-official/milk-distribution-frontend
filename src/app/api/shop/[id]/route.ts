@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import { Shop } from "../../models/Shop";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest,{ params }: { params: Promise<{ id: string }> }) {
   try {
     await dbConnect();
 
-    const id = params.id; 
+    const id =  (await params).id; 
     const body = await req.json(); 
 
     const updatedShop = await Shop.findByIdAndUpdate(id, body, { new: true });
