@@ -30,7 +30,7 @@ export const deleteCustomer = async (id: string) => {
   const res = await axios.delete(`/customers/${id}`);
   return res.data;
 };
-
+//clear customer
 
 export const clearCustomers = async () =>{
   const res = await axios.get(`/truncate-customers`)
