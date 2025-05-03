@@ -16,7 +16,9 @@ const SubHeader = () => {
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
-  const {customerCount,milkSuppliedCount} = useAppSelector((state)=> state.utility)
+  const { customerCount, milkSuppliedCount } = useAppSelector(
+    (state) => state.customers
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -26,16 +28,20 @@ const SubHeader = () => {
 
   const handleStartDateChange = () => {
     if (startDate) {
-      updateStartDate(shopInfo._id, startDate.toISOString(), dayjs(startDate).format('MMMM'))
+      updateStartDate(
+        shopInfo._id,
+        startDate.toISOString(),
+        dayjs(startDate).format("MMMM")
+      )
         .then((res) => {
           dispatch(setShop(res.data));
         })
         .catch(() => {});
-      }
-    };
-    const handleEndDateChange = () => {
-      if (endDate) {
-        updateEndDate(shopInfo._id, endDate.toISOString())
+    }
+  };
+  const handleEndDateChange = () => {
+    if (endDate) {
+      updateEndDate(shopInfo._id, endDate.toISOString())
         .then((res) => {
           dispatch(setShop(res.data));
         })
@@ -75,9 +81,9 @@ const SubHeader = () => {
       <div className="flex flex-col border w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-black to-gray-800 relative">
         <ChartSpline className={"absolute right-5"} />
         <span className="text-sm">Total Collection</span>
-        <span className="text-2xl">{milkSuppliedCount.toFixed(2)} Ltrs.</span>
+        <span className="text-2xl">{milkSuppliedCount?.toFixed(2)} Ltrs.</span>
         <span className="text-sm text-gray-500">
-          Cost Estimation : Rs.{(milkSuppliedCount * 3).toFixed(2)}(approx)
+          Cost Estimation : Rs.{(milkSuppliedCount??0 * 3).toFixed(2)}(approx)
         </span>
       </div>
       <div

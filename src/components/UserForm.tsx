@@ -4,18 +4,26 @@ import { useFormik } from "formik";
 import { FC } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { createCustomer, updateCustomer } from "@/api/customerApi";
-import { useAppSelector } from "@/redux/hooks/redux.hooks";
+import {
+  createCustomer,
+  getCustomers,
+  updateCustomer,
+} from "@/api/customerApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/redux.hooks";
+import {
+  updateCounter,
+  updateCustomerList,
+} from "@/redux/actions/customerSlice";
 
 interface IUserFormProps {
   userInfo?: UserInfo;
-  setShowModal:React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
   //call api for details fetch here
   const shopId = useAppSelector((state) => state.shopInfo.shop._id);
-
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       name: userInfo?.name ?? "",
@@ -34,12 +42,50 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
     enableReinitialize: true,
     onSubmit: (values) => {
       if (userInfo) {
-        updateCustomer(userInfo?._id??'', values)
-          .then(() => {setShowModal(false)})
+        updateCustomer(userInfo?._id ?? "", values)
+          .then(() => {
+            setShowModal(false);
+            getCustomers()
+              .then((res) => {
+                dispatch(updateCustomerList({ customerList: res ?? [] }));
+                const milkSuppliedCount = res?.reduce(
+                  (total: number, customer: UserInfo) => {
+                    return total + parseFloat(customer?.milk_supplied || "0");
+                  },
+                  0
+                );
+                dispatch(
+                  updateCounter({
+                    customerCount: res?.length,
+                    milkSuppliedCount,
+                  })
+                );
+              })
+              .catch(() => {});
+          })
           .catch(() => {});
       } else {
         createCustomer(values)
-          .then(() => {setShowModal(false)})
+          .then(() => {
+            setShowModal(false);
+            getCustomers()
+              .then((res) => {
+                dispatch(updateCustomerList({ customerList: res ?? [] }));
+                const milkSuppliedCount = res?.reduce(
+                  (total: number, customer: UserInfo) => {
+                    return total + parseFloat(customer?.milk_supplied || "0");
+                  },
+                  0
+                );
+                dispatch(
+                  updateCounter({
+                    customerCount: res?.length,
+                    milkSuppliedCount,
+                  })
+                );
+              })
+              .catch(() => {});
+          })
           .catch(() => {});
       }
     },
@@ -70,7 +116,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
             value={formik.values.membership_no}
             onChange={formik.handleChange}
             type="number"
-            disabled={!!(userInfo?._id)}
+            disabled={!!userInfo?._id}
           />
         </div>
       </div>
@@ -96,8 +142,8 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
             type="number"
           />
         </div>
-        </div>
-        <span>Average</span>
+      </div>
+      <span>Average</span>
       <div className="flex flex-col sm:flex-row w-full gap-x-4">
         <div className="sm:w-1/2 w-full">
           <span className="text-sm">Fat%</span>
@@ -174,7 +220,7 @@ const UserForm: FC<IUserFormProps> = ({ userInfo, setShowModal }) => {
         </div>
       </div>
 
-      <Button className="mt-2" type="submit" >
+      <Button className="mt-2" type="submit">
         Update Details
       </Button>
     </form>

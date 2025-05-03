@@ -39,10 +39,11 @@ export async function POST(req: NextRequest) {
       branch_name: body.branch_name,
       account_number: body.account_number,
       ifsc_code: body.ifsc_code,
+      total_qty_milk_supplied: body.total_qty_milk_supplied,
       created_at: new Date(),
     });
     await customer.save();
-    return NextResponse.json({ success: true }, { status: 201 });
+    return NextResponse.json({ success: true, data: customer }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },

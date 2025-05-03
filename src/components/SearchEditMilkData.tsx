@@ -16,12 +16,12 @@ import EditCustomerInformation from "./EditCustomerInformation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useAppDispatch } from "@/redux/hooks/redux.hooks";
-import { updateCounter } from "@/redux/actions/utilitySlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/redux.hooks";
+import { updateCounter, updateCustomerList } from "@/redux/actions/customerSlice";
 
 const SearchEditMilkData = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [customerList, setCustomerList] = useState<UserInfo[]>([]);
+  const customerList = useAppSelector(state=> state.customers.customerList)
   const [selectedId, setSelectedId] = useState<string>("");
 
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ const SearchEditMilkData = () => {
   useEffect(() => {
     getCustomers()
       .then((res) => {
-        setCustomerList(res ?? []);
+        dispatch(updateCustomerList({customerList:res??[]}))
         const milkSuppliedCount = res?.reduce(
           (total: number, customer: UserInfo) => {
             return total + parseFloat(customer?.milk_supplied || "0");
@@ -54,11 +54,10 @@ const SearchEditMilkData = () => {
   }, [dispatch]);
 
   const handleMilkChange = (id: string, value: string) => {
-    setCustomerList((prevList) =>
-      prevList.map((customer) =>
-        customer._id === id ? { ...customer, milk_supplied: value } : customer
-      )
+    const updatedList = customerList?.map((customer) =>
+      customer._id === id ? { ...customer, milk_supplied: value } : customer
     );
+    dispatch(updateCustomerList({ customerList: updatedList }));
   };
 
   return (
@@ -68,7 +67,7 @@ const SearchEditMilkData = () => {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading={`Customers (${customerList?.length})`}>
-            {customerList.map((customer) => (
+            {customerList?.map((customer) => (
               <CommandItem
                 key={customer?._id}
                 onSelect={() => setSelectedId(customer?._id ?? "")}

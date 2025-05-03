@@ -10,7 +10,7 @@ export async function GET() {
   try {
     await dbConnect;
 
-    const shop = await Shop.findOne().lean();
+    const shop:any = await Shop.findOne().lean();
     const rawCustomers = await Customer.find().lean();
 
     const customers: UserInfo[] = rawCustomers.map((cust: any) => ({
@@ -60,14 +60,14 @@ export async function GET() {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      doc.text(`Society Name: - ${shop?.[0].society_name}`, 3, 3);
-      doc.text(`Society Code: - ${shop?.[0].society_code}`, 13, 3);
-      doc.text(`Unit: - ${shop?.[0].unit}`, 25, 3);
-      doc.text(`Month:-   ${shop?.[0].month}`, 2, 3.7);
-      const startDate = new Date(shop?.[0].start_bill_date).toLocaleDateString(
+      doc.text(`Society Name: - ${shop?.society_name}`, 3, 3);
+      doc.text(`Society Code: - ${shop?.society_code}`, 13, 3);
+      doc.text(`Unit: - ${shop?.unit}`, 25, 3);
+      doc.text(`Month:-   ${shop?.month}`, 2, 3.7);
+      const startDate = new Date(shop?.start_bill_date).toLocaleDateString(
         "en-GB"
       ); // DD/MM/YYYY
-      const endDate = new Date(shop?.[0].end_bill_date).toLocaleDateString(
+      const endDate = new Date(shop?.end_bill_date).toLocaleDateString(
         "en-GB"
       );
       doc.text(

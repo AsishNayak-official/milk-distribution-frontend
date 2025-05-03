@@ -1,17 +1,20 @@
+import { UserInfo } from '@/lib/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UtilityState{
-    milkSuppliedCount : number;
-    customerCount : number;
+    milkSuppliedCount ?: number;
+    customerCount ?: number;
+    customerList ?: UserInfo[];
 }
 
 const initialState:UtilityState  = {
     milkSuppliedCount: 0,
     customerCount:0,
+    customerList:[],
 };
 
-export const utilitySlice = createSlice({
-    name: 'utility',
+export const customerSlice = createSlice({
+    name: 'customers',
     initialState,
     reducers: {
       updateCounter: (state, action: PayloadAction<UtilityState>) => {
@@ -22,10 +25,14 @@ export const utilitySlice = createSlice({
         state.milkSuppliedCount = 0;
         state.customerCount = 0;
       },
+      updateCustomerList: (state, action: PayloadAction<UtilityState>)=>{
+        state.customerList = action.payload.customerList;
+      }
     },
   });
   export const {
     updateCounter,
     clearCounter,
-  } = utilitySlice.actions;
-  export default utilitySlice.reducer;
+    updateCustomerList,
+  } = customerSlice.actions;
+  export default customerSlice.reducer;

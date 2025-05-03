@@ -6,14 +6,22 @@ import SearchEditMilkData from "./SearchEditMilkData";
 import OwnerInfo from "./ShopInfo";
 import DownloadFile from "./DownloadFile";
 import { clearCustomers } from "@/api/customerApi";
+import { useAppDispatch } from "@/redux/hooks/redux.hooks";
+import {
+  clearCounter,
+  updateCustomerList,
+} from "@/redux/actions/customerSlice";
 
 const Dashboard = () => {
-
-  const handleReset =()=>{
+  const dispatch = useAppDispatch();
+  const handleReset = () => {
     clearCustomers()
-    .then(()=>{})
-    .catch(()=>{})
-  }
+      .then(() => {
+        dispatch(updateCustomerList({ customerList: [] }));
+        dispatch(clearCounter());
+      })
+      .catch(() => {});
+  };
   return (
     <div>
       {/* Navbar */}
@@ -22,19 +30,21 @@ const Dashboard = () => {
           <span className="text-2xl font-semibold">Diary Management</span>
         </div>
         <div className="flex items-center gap-4 sm:flex-row flex-row-reverse">
-          <RefreshCcw onClick={handleReset}/>
+          <RefreshCcw onClick={handleReset} />
           <Separator orientation="vertical" />
           <div className="flex flex-row items-center gap-x-2">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-y-0">
-            <span className="leading-tight">asish.nayak@eximietas.design</span>
-            <span className="underline font-semibold cursor-pointer">
-              Logout
-            </span>
-          </div>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-y-0">
+              <span className="leading-tight">
+                asish.nayak@eximietas.design
+              </span>
+              <span className="underline font-semibold cursor-pointer">
+                Logout
+              </span>
+            </div>
           </div>
         </div>
       </div>
